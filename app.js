@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const axios = require("axios");
+const fs = require("fs");
 
 const client = new Discord.Client();
 
@@ -37,7 +38,7 @@ client.on("ready", () => {
 });
 
 client.on("message", msg => {
-  if (msg.content.includes("#addMe")) {
+  /* if (msg.content.includes("#addMe")) {
     tUserName = msg.content.slice(7);
     let url = "https://api.twitch.tv/kraken/users?login=" + tUserName;
     const fetchData = async () => {
@@ -64,6 +65,41 @@ client.on("message", msg => {
       }
     };
     fetchData();
+  }  */
+  if (msg.content.includes("#addme")) {
+    tUserName = msg.content.slice(7);
+    let url = "https://api.twitch.tv/kraken/users?login=" + tUserName;
+    if (tUserName) {
+      const fetchData = async () => {
+        const result = await api.get(url);
+        count = Object.keys(result.data.users).length;
+        if (count === 1) {
+          fs.readFile("data.json", "utf-8", function(err, data) {
+            if (err) throw err;
+            let json = JSON.parse(data);
+            let json2 = json.users.push(tUserName);
+            console.log(json2);
+            
+            
+            fs.appendFile("data.json", json.users.push(tUserName), function(err) {
+              if (err) throw err;
+              msg.reply(
+                "Lets go, your channel members will be notified when you go live on twitch"
+              );
+            });
+          });
+        } else {
+          msg.reply("Twitch username does not exist");
+        }
+      };
+      fetchData();
+    } else {
+      msg.reply("Please give Twitch Username");
+    }
+  } else if (msg.content === "#list") {
+    fs.readFile("data.txt", "utf-8", function(err, data) {
+      msg.reply("\nList of subscribed streamers\n" + data);
+    });
   }
 });
 
