@@ -13,7 +13,46 @@ let api = axios.create({
 });
 
 client.on("ready", () => {
+  let notifyStatus = [];
   console.log(`Logged in as ${client.user.tag}!`);
+  function myFunction() {
+    setInterval(() => {
+      fs.readFile("userid.txt", "utf-8", function(err, data) {
+        let strArr = data.split("\n");
+        const checkStreamStatus = async () => {
+          strArr.forEach(async id => {
+            const res = await api.get(
+              "https://api.twitch.tv/kraken/streams/" + id
+            );
+
+            if (res.data["stream"] != null && notifyStatus.indexOf(id) === -1) {
+              const channel = client.channels.find("name", "bot-coms");
+              channel.send(
+                "@everyone " +
+                  res.data["stream"]["channel"]["name"] +
+                  " is now live at https://twitch.tv/" +
+                  res.data["stream"]["channel"]["name"]
+              );
+              notifyStatus.push(id);
+            } else if (
+              res.data["stream"] === null &&
+              notifyStatus.indexOf(id) > -1
+            ) {
+              notifyStatus.splice(notifyStatus.indexOf(id), 1);
+              /* const channel = client.channels.find("name", "generaltest");
+              channel.send(
+                "@everyone " +
+                  res.data["stream"]["channel"]["name"] +
+                  " stopped streaming"
+              ); */
+            }
+          });
+        };
+        checkStreamStatus();
+      });
+    }, 15000);
+  }
+  myFunction();
   /* const list = client.guilds.get("253466422301294593");
   let gameName;
   list.members.forEach(member => {
@@ -74,19 +113,15 @@ client.on("message", msg => {
         const result = await api.get(url);
         count = Object.keys(result.data.users).length;
         if (count === 1) {
-          fs.readFile("data.json", "utf-8", function(err, data) {
+          userID = result.data.users[0]["_id"];
+          fs.appendFile("userid.txt", "\n" + userID, function(err) {
             if (err) throw err;
-            let json = JSON.parse(data);
-            let json2 = json.users.push(tUserName);
-            console.log(json2);
-            
-            
-            fs.appendFile("data.json", json.users.push(tUserName), function(err) {
-              if (err) throw err;
-              msg.reply(
-                "Lets go, your channel members will be notified when you go live on twitch"
-              );
-            });
+          });
+          fs.appendFile("data.txt", "\n" + tUserName, function(err) {
+            if (err) throw err;
+            msg.reply(
+              "Lets go, your channel members will be notified when you go live on twitch"
+            );
           });
         } else {
           msg.reply("Twitch username does not exist");
@@ -98,7 +133,7 @@ client.on("message", msg => {
     }
   } else if (msg.content === "#list") {
     fs.readFile("data.txt", "utf-8", function(err, data) {
-      msg.reply("\nList of subscribed streamers\n" + data);
+      msg.reply("\nList of subscribed streamers:\n" + data);
     });
   }
 });
