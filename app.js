@@ -13,11 +13,12 @@ let api = axios.create({
     Accept: "application/vnd.twitchtv.v5+json"
   }
 });
+const PORT = process.env.PORT || 3000;
 
 client.login("NjYyMjkzMDEwNDI3Njc0NjU4.Xg4Log.YbekiaqoE6QhKee-EVvzEDW-Fe4");
 
 app.get("/", (req, res) => res.send("Twitch alert bot is now live!"));
-app.listen(5000, () => {
+app.listen(PORT, () => {
   console.log("Server is ready");
   client.on("ready", () => {
     let notifyStatus = [];
