@@ -25,7 +25,7 @@ client.on("ready", () => {
               "https://api.twitch.tv/kraken/streams/" + id
             );
             if (res.data["stream"] != null && notifyStatus.indexOf(id) === -1) {
-              const channel = client.channels.find("name", "generaltest");
+              const channel = client.channels.find("name", "bot-coms");
               channel.send(
                 "@everyone " +
                   res.data["stream"]["channel"]["name"] +
@@ -108,7 +108,7 @@ client.on("message", msg => {
     });
   } else if (msg.content.includes("#remove")) {
     removetUserName = msg.content.slice(8);
-    client.channels.get("662650760949006337").send("Admin will soon remove the name from the subscription list. GG");
+    client.channels.get("632266636140871701").send("Admin will soon remove "+removetUserName+" from the subscription list. GG");
   }
 });
 
