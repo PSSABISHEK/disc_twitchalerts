@@ -17,5 +17,5 @@ npm start
 
 ## Contributing
 
-[P.S.S ABISHEK](https://github.com/pssabishek)
+[P.S.S Abishek](https://github.com/pssabishek) <br/>
 [Nandhakumar Saravanan](https://github.com/nandhakumar23)

@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const axios = require("axios");
 const fs = require("fs");
+const http = require('http');
 
 const client = new Discord.Client();
 
@@ -113,3 +114,8 @@ client.on("message", msg => {
 });
 
 client.login("NjYyMjkzMDEwNDI3Njc0NjU4.Xg4Log.YbekiaqoE6QhKee-EVvzEDW-Fe4");
+
+http.createServer(function (req, res) {
+  res.write('Discord Twitch Alerts bot is now live');
+}).listen(8080);
+
