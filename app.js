@@ -15,7 +15,7 @@ let api = axios.create({
 client.on("ready", () => {
   let notifyStatus = [];
   console.log(`Logged in as ${client.user.tag}!`);
-  function myFunction() {
+  function twtichApiCall() {
     setInterval(() => {
       fs.readFile("userid.txt", "utf-8", function(err, data) {
         let strArr = data.split("\n");
@@ -24,9 +24,8 @@ client.on("ready", () => {
             const res = await api.get(
               "https://api.twitch.tv/kraken/streams/" + id
             );
-
             if (res.data["stream"] != null && notifyStatus.indexOf(id) === -1) {
-              const channel = client.channels.find("name", "bot-coms");
+              const channel = client.channels.find("name", "generaltest");
               channel.send(
                 "@everyone " +
                   res.data["stream"]["channel"]["name"] +
@@ -52,7 +51,7 @@ client.on("ready", () => {
       });
     }, 15000);
   }
-  myFunction();
+  twtichApiCall();
   /* const list = client.guilds.get("253466422301294593");
   let gameName;
   list.members.forEach(member => {
@@ -77,34 +76,6 @@ client.on("ready", () => {
 });
 
 client.on("message", msg => {
-  /* if (msg.content.includes("#addMe")) {
-    tUserName = msg.content.slice(7);
-    let url = "https://api.twitch.tv/kraken/users?login=" + tUserName;
-    const fetchData = async () => {
-      const result = await api.get(url);
-      count = Object.keys(result.data.users).length;
-      if (count === 1) {
-        userID = result.data.users[0]["_id"];
-        const res = await api.get(
-          "https://api.twitch.tv/kraken/streams/" + userID
-        );
-        if (res.data["stream"] != null) {
-          const channel = client.channels.find("name", "generaltest");
-          channel.send(
-            "@everyone " +
-              tUserName +
-              " is now live at https://twitch.tv/" +
-              tUserName
-          );
-        } else {
-          msg.reply("Stream is currently offline");
-        }
-      } else {
-        msg.reply("Twitch username does not exist");
-      }
-    };
-    fetchData();
-  }  */
   if (msg.content.includes("#addme")) {
     tUserName = msg.content.slice(7);
     let url = "https://api.twitch.tv/kraken/users?login=" + tUserName;
@@ -135,6 +106,9 @@ client.on("message", msg => {
     fs.readFile("data.txt", "utf-8", function(err, data) {
       msg.reply("\nList of subscribed streamers:\n" + data);
     });
+  } else if (msg.content.includes("#remove")) {
+    removetUserName = msg.content.slice(8);
+    client.channels.get("662650760949006337").send("Admin will soon remove the name from the subscription list. GG");
   }
 });
 
