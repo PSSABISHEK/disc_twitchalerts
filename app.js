@@ -25,6 +25,7 @@ app.listen(PORT, () => {
     console.log(`Logged in as ${client.user.tag}!`);
     function twtichApiCall() {
       setInterval(() => {
+        app.get("https://twitch-alerts.herokuapp.com/");
         fs.readFile("userid.txt", "utf-8", function(err, data) {
           let strArr = data.split("\n");
           const checkStreamStatus = async () => {
