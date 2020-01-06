@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3000;
 
 client.login("NjYyMjkzMDEwNDI3Njc0NjU4.Xg4Log.YbekiaqoE6QhKee-EVvzEDW-Fe4");
 
-app.get("/", (req, res) => res.send("Twitch alert bot is now live!"));
+//app.get("/", (req, res) => res.send("Twitch alert bot is now live!"));
 app.listen(PORT, () => {
   console.log("Server is ready");
   client.on("ready", () => {
@@ -61,10 +61,10 @@ app.listen(PORT, () => {
           };
           checkStreamStatus();
         });
-      }, 15000);
+      }, 3000);
     }
-    twtichApiCall();
-    /* const list = client.guilds.get("253466422301294593");
+    //twtichApiCall();
+    /* const list = client.guilds.get("662381738592436244");
     let gameName;
     list.members.forEach(member => {
       if (
@@ -72,7 +72,9 @@ app.listen(PORT, () => {
         member.presence.status === "idle"
       ) {
         gameName = member.presence.game;
-        if (gameName != null) {
+        console.log(member);
+        
+         if (gameName != null) {
           if (gameName.name === "Twitch") {
             const channel = client.channels.find("name", "bot-coms");
             channel.send(
@@ -81,11 +83,51 @@ app.listen(PORT, () => {
                 " is now live at " +
                 gameName.url
             );
-          }
+          } 
         }
       }
     }); */
   });
+
+  client.on("message", msg => {
+    if (msg.content === "#ocd") {
+      console.log("OCD");
+    }
+  });
+
+  /* client.on("message", msg => {
+    if (msg.content.includes("#annoy")) {
+      //console.log(msg.voiceChannel.members);
+      annoyUserName = msg.content.slice(7);
+      client.on("voiceStateUpdate", (oldmember, newmember) => {
+        let list, listOld, userID;
+        let oldUserChannel = oldmember.voiceChannel;
+        let newUserChannel = newmember.voiceChannel;
+        if (newUserChannel != null) {
+          list = newUserChannel.members.map(c => c.user["username"]);
+          console.log(list);
+
+          userID = newUserChannel.members.map(c => c.user["id"]);
+          userIDInd = list.indexOf(annoyUserName);
+
+          if (list.indexOf(annoyUserName) > -1) {
+            //setInterval(() => {
+              client.channels
+                .get("632266636140871701")
+                .send("<@" + userID[userIDInd] + "> GTFO");
+            //}, 3000);
+          }
+        } else {
+          listOld = oldUserChannel.members.map(c => c.user["username"]);
+          if (listOld.indexOf(annoyUserName) < 0) {
+            client.channels
+              .get("632266636140871701")
+              .send("<@" + userID[userIDInd] + "> Bye have a great time");
+          }
+        }
+      });
+    }
+  }); */
 
   client.on("message", msg => {
     if (msg.content.includes("#addme")) {
