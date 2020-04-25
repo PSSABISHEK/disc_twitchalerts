@@ -64,7 +64,7 @@ app.listen(PORT, () => {
         checkStreamStatus();
       });
     }
-    //twtichApiCall();
+    twtichApiCall();
   });
 
   //INTENDEND TO PUSH USERS TO RESPECTIVE GAME=VC
