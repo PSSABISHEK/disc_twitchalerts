@@ -3,10 +3,11 @@ const axios = require("axios");
 const fs = require("fs");
 const express = require("express");
 
+const config = require('./config.json')
 const client = new Discord.Client();
 const app = express();
 
-let API_KEY = "wqme8bd5crqnznn948slnekdh63ke0";
+let API_KEY = config.API_KEY;
 let api = axios.create({
   headers: {
     "Client-ID": API_KEY,
@@ -15,9 +16,9 @@ let api = axios.create({
 });
 const PORT = process.env.PORT || 101;
 
-client.login("NjYyMjkzMDEwNDI3Njc0NjU4.Xg4Log.YbekiaqoE6QhKee-EVvzEDW-Fe4");
+client.login(config.LOGIN_ID);
 
-//app.get("/", (req, res) => res.send("Twitch alert bot is now live!"));
+app.get("/", (req, res) => res.send("Twitch alert bot is now live!"));
 app.listen(PORT, () => {
   console.log("Server is ready");
   client.on("ready", () => {
@@ -33,7 +34,7 @@ app.listen(PORT, () => {
               "https://api.twitch.tv/kraken/streams/" + id
             );
             if (res.data["stream"] != null && notifyStatus.indexOf(id) === -1) {
-              const channel = client.channels.find("name", "bot-coms-test");
+              const channel = client.channels.find("name", "bot-coms");
               await channel.send(
                 "@everyone " +
                   res.data["stream"]["channel"]["name"] +
@@ -47,7 +48,7 @@ app.listen(PORT, () => {
               notifyStatus.indexOf(id) > -1
             ) {
               notifyStatus.splice(notifyStatus.indexOf(id), 1);
-              const channel = client.channels.find("name", "generaltest");
+              const channel = client.channels.find("name", "bot-coms");
               channel.send(
                 "@everyone " +
                   res.data["stream"]["channel"]["name"] +
@@ -62,7 +63,7 @@ app.listen(PORT, () => {
         checkStreamStatus();
       });
     }
-    twtichApiCall();
+    //twtichApiCall();
   });
 
   //INTENDEND TO PUSH USERS TO RESPECTIVE GAME=VC
@@ -125,14 +126,14 @@ app.listen(PORT, () => {
             });
             fs.appendFile("data.txt", "\n" + tUserName, function (err) {
               if (err) throw err;
-              msg.reply(
+              msg.channel.send(
                 "Lets go, your channel members will be notified when " +
                   tUserName +
                   " goes live on twitch"
               );
             });
           } else {
-            msg.reply("Twitch username does not exist");
+            msg.channel.send("Twitch username does not exist");
           }
         };
         fetchData();
@@ -141,11 +142,11 @@ app.listen(PORT, () => {
       }
     } else if (msg.content === "#list") {
       fs.readFile("data.txt", "utf-8", function (err, data) {
-        msg.reply("\nList of subscribed streamers:\n" + data);
+        msg.channel.send("\nList of subscribed streamers:\n" + data);
       });
     } else if (msg.content.includes("#remove")) {
       removetUserName = msg.content.slice(8);
-      msg.reply(
+      msg.channel.send(
         "Admin will soon remove " +
           removetUserName +
           " from the subscription list. GG"
