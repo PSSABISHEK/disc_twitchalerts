@@ -8,6 +8,7 @@ const client = new Discord.Client();
 const app = express();
 
 let API_KEY = config.API_KEY;
+let DISC_API_KEY = config.LOGIN_ID
 let api = axios.create({
   headers: {
     "Client-ID": API_KEY,
@@ -16,7 +17,7 @@ let api = axios.create({
 });
 const PORT = process.env.PORT || 101;
 
-client.login(config.LOGIN_ID);
+client.login(DISC_API_KEY);
 
 app.get("/", (req, res) => res.send("Twitch alert bot is now live!"));
 app.listen(PORT, () => {
@@ -138,7 +139,7 @@ app.listen(PORT, () => {
         };
         fetchData();
       } else {
-        msg.reply("Please give Twitch Username");
+        msg.channel.send("Please give Twitch Username");
       }
     } else if (msg.content === "#list") {
       fs.readFile("data.txt", "utf-8", function (err, data) {
